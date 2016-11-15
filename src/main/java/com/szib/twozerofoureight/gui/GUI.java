@@ -31,6 +31,8 @@ import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.ActionMap;
 import javax.swing.ButtonGroup;
@@ -49,6 +51,7 @@ import javax.swing.border.EmptyBorder;
 
 import com.szib.twozerofoureight.Board;
 import com.szib.twozerofoureight.Direction;
+import com.szib.twozerofoureight.HighScore;
 
 public class GUI extends JFrame {
 
@@ -90,6 +93,8 @@ public class GUI extends JFrame {
 
   private JLabel lblScore;
 
+  private JLabel lblHighScore;
+
   private boolean running;
 
   private Dimension frameMaximumSize;
@@ -97,6 +102,8 @@ public class GUI extends JFrame {
   private int targetNumber = 2048;
 
   private int boardSize = 4;
+
+  private int highScore;
 
   /** Launch the application. */
   public static void main(String[] args) {
@@ -106,6 +113,12 @@ public class GUI extends JFrame {
           public void run() {
             GUI frame = new GUI();
             frame.setVisible(true);
+            frame.addWindowListener(
+                new WindowAdapter() {
+                  public void windowClosing(WindowEvent e) {
+                    HighScore.saveHighScore(frame.getHighScore());
+                  }
+                });
           }
         });
   }
@@ -184,6 +197,9 @@ public class GUI extends JFrame {
 
     lblScore = new JLabel("");
     sidePanel.add(lblScore);
+
+    lblHighScore = new JLabel("High score: 0");
+    sidePanel.add(lblHighScore);
     pack();
     updateScore();
 
@@ -194,6 +210,7 @@ public class GUI extends JFrame {
     screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     frameMinimumSize = new Dimension(200, 200);
     frameMaximumSize = screenSize;
+    highScore = HighScore.loadHighScore();
     board = new Board(targetNumber, boardSize);
     setRunning(true);
   }
@@ -228,6 +245,10 @@ public class GUI extends JFrame {
 
   private void updateScore() {
     lblScore.setText("Score: " + board.getScore());
+    if (board.getScore() > highScore) {
+      highScore = board.getScore();
+    }
+    lblHighScore.setText("High score: " + highScore);
   }
 
   public boolean isRunning() {
@@ -236,6 +257,9 @@ public class GUI extends JFrame {
 
   public void setRunning(boolean running) {
     this.running = running;
+    if (!running) {
+      HighScore.saveHighScore(highScore);
+    }
   }
 
   public int getBoardSize() {
@@ -248,9 +272,14 @@ public class GUI extends JFrame {
 
   /** */
   private void resetGame() {
+    setRunning(false);
     board.resetBoard(targetNumber, boardSize);
     updateScore();
     setRunning(true);
     repaint();
+  }
+
+  public int getHighScore() {
+    return highScore;
   }
 }
