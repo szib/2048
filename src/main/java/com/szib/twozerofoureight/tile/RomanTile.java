@@ -23,19 +23,62 @@
  */
 package com.szib.twozerofoureight.tile;
 
+import java.util.TreeMap;
+
 import com.szib.twozerofoureight.Coords;
 
-public class StandardTile extends Tile implements ITile {
+public class RomanTile extends Tile implements ITile {
 
-  public StandardTile(Coords coords) {
+  private static final TreeMap<Integer, String> numberMap = new TreeMap<Integer, String>();
+
+  static {
+	  numberMap.put(1000, "M");
+	  numberMap.put(900, "CM");
+	  numberMap.put(500, "D");
+	  numberMap.put(400, "CD");
+	  numberMap.put(100, "C");
+	  numberMap.put(90, "XC");
+	  numberMap.put(50, "L");
+	  numberMap.put(40, "XL");
+	  numberMap.put(10, "X");
+	  numberMap.put(9, "IX");
+	  numberMap.put(5, "V");
+	  numberMap.put(4, "IV");
+	  numberMap.put(1, "I");
+  }
+  
+  public RomanTile(Coords coords, int num) {
+    this(coords);
+    this.setNumber(num);
+  }
+
+  public RomanTile(Coords coords) {
     super(coords);
   }
 
-  protected float getFontSize(int drawableSize, int number) {
-    return (float) (0.8 - (getStringToDraw(number).length() * 0.1)) * drawableSize;
+  @Override
+  protected String getStringToDraw(int number) {
+    return convertToRoman(number);
   }
 
-  protected String getStringToDraw(int number) {
-    return Integer.toString(number);
+  @Override
+  protected float getFontSize(int drawableSize, int number) {
+    String romanNumber = getStringToDraw(number);
+    float fontSize = (float) (0.75 - (romanNumber.length() * 0.092)) * drawableSize;
+    if (number == 128) {
+      fontSize *= 2.25;
+    }
+    if (number == 2048) {
+      fontSize *= 14.8;
+    }
+    return fontSize;
+  }
+
+  private static String convertToRoman(int number) {
+    int l = numberMap.floorKey(number);
+    if (number == l) {
+      return numberMap.get(number);
+    }
+    return numberMap.get(l) + convertToRoman(number - l);
   }
 }

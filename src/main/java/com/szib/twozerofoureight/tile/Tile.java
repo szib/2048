@@ -34,7 +34,7 @@ import java.util.List;
 import com.szib.twozerofoureight.Coords;
 import com.szib.twozerofoureight.Direction;
 
-public abstract class Tile {
+public abstract class Tile implements ITile {
 
   protected int number;
   protected Coords coords;
@@ -176,7 +176,7 @@ public abstract class Tile {
 
     Font scaledFont = font.deriveFont(fontSize);
     Rectangle2D rectangle =
-        scaledFont.getStringBounds(getDrawableString(number), fontRenderContext);
+        scaledFont.getStringBounds(getStringToDraw(number), fontRenderContext);
     BufferedImage image = new BufferedImage(drawableSize, drawableSize, BufferedImage.TYPE_INT_RGB);
 
     Graphics graphics = image.getGraphics();
@@ -196,12 +196,12 @@ public abstract class Tile {
 
     graphics.setFont(scaledFont);
     graphics.setColor(getFontColor());
-    graphics.drawString(getDrawableString(number), coordX, coordY);
+    graphics.drawString(getStringToDraw(number), coordX, coordY);
     graphics.dispose();
     return image;
   }
 
-  protected abstract String getDrawableString(int number);
+  protected abstract String getStringToDraw(int number);
 
   protected abstract float getFontSize(int drawableSize, int number);
 }

@@ -39,6 +39,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import com.szib.twozerofoureight.tile.ITile;
+import com.szib.twozerofoureight.tile.RomanTile;
 import com.szib.twozerofoureight.tile.StandardTile;
 
 public class Board {
@@ -63,7 +64,7 @@ public class Board {
 
   private void addNewTile() {
     if (!isFull()) {
-      tiles.add(new StandardTile(emptyCoords.remove(rng.nextInt(emptyCoords.size()))));
+      tiles.add(new RomanTile(emptyCoords.remove(rng.nextInt(emptyCoords.size()))));
     }
   }
 
