@@ -23,6 +23,7 @@
  */
 package com.szib.twozerofoureight.tile;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.List;
 
@@ -60,4 +61,8 @@ public interface ITile {
   void setNumber(int number);
 
   String toString();
+
+  Color getFontColor();
+
+  Color getBackgroundColor();
 }
