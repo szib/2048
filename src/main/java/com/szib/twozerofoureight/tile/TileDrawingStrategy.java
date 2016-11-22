@@ -23,19 +23,9 @@
  */
 package com.szib.twozerofoureight.tile;
 
-import com.szib.twozerofoureight.Coords;
+public interface TileDrawingStrategy {
 
-public class StandardTile extends Tile implements ITile {
+  float getFontSize(int drawableSize, int number);
 
-  public StandardTile(Coords coords) {
-    super(coords);
-  }
-
-  protected float getFontSize(int drawableSize, int number) {
-    return (float) (0.8 - (getStringToDraw(number).length() * 0.1)) * drawableSize;
-  }
-
-  protected String getStringToDraw(int number) {
-    return Integer.toString(number);
-  }
+  String getStringToDraw(int number);
 }

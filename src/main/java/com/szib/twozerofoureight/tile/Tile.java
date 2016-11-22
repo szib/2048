@@ -34,16 +34,19 @@ import java.util.List;
 import com.szib.twozerofoureight.Coords;
 import com.szib.twozerofoureight.Direction;
 
-public abstract class Tile implements ITile {
+public class Tile implements ITile {
 
   protected int number;
   protected Coords coords;
   protected boolean joinedInThisRound;
 
-  public Tile(Coords coords) {
+  private TileDrawingStrategy drawingStrategy;
+
+  public Tile(Coords coords, TileDrawingStrategy drawingStrategy) {
     this.setNumber(Math.random() < 0.9 ? 2 : 4);
     this.setCoords(coords);
     this.setJoinedInThisRound(false);
+    this.drawingStrategy = drawingStrategy;
   }
 
   public boolean canJoin(List<ITile> neighbourList) {
@@ -172,11 +175,11 @@ public abstract class Tile implements ITile {
 
   BufferedImage getImage(
       Font font, FontRenderContext fontRenderContext, int drawableSize, int number) {
-    float fontSize = getFontSize(drawableSize, number);
+    float fontSize = drawingStrategy.getFontSize(drawableSize, number);
 
     Font scaledFont = font.deriveFont(fontSize);
     Rectangle2D rectangle =
-        scaledFont.getStringBounds(getStringToDraw(number), fontRenderContext);
+        scaledFont.getStringBounds(drawingStrategy.getStringToDraw(number), fontRenderContext);
     BufferedImage image = new BufferedImage(drawableSize, drawableSize, BufferedImage.TYPE_INT_RGB);
 
     Graphics graphics = image.getGraphics();
@@ -196,12 +199,12 @@ public abstract class Tile implements ITile {
 
     graphics.setFont(scaledFont);
     graphics.setColor(getFontColor());
-    graphics.drawString(getStringToDraw(number), coordX, coordY);
+    graphics.drawString(drawingStrategy.getStringToDraw(number), coordX, coordY);
     graphics.dispose();
     return image;
   }
 
-  protected abstract String getStringToDraw(int number);
-
-  protected abstract float getFontSize(int drawableSize, int number);
+  public void setDrawingStrategy(TileDrawingStrategy drawingStrategy) {
+    this.drawingStrategy = drawingStrategy;
+  }
 }

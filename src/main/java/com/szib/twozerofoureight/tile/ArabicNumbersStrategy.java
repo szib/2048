@@ -21,42 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.szib.twozerofoureight.gui;
+package com.szib.twozerofoureight.tile;
 
-import java.awt.Graphics;
+public class ArabicNumbersStrategy implements TileDrawingStrategy {
 
-import javax.swing.JPanel;
+  public ArabicNumbersStrategy() {}
 
-import com.szib.twozerofoureight.Board;
-import com.szib.twozerofoureight.tile.TileDrawingStrategy;
-
-public class BoardPanel extends JPanel {
-
-  private static final long serialVersionUID = -6115698763263796312L;
-  private Board board;
-  private TileDrawingStrategy drawingStrategy;
-
-  public BoardPanel(Board board, TileDrawingStrategy drawingStrategy) {
-    this.board = board;
-    this.drawingStrategy = drawingStrategy;
+  public float getFontSize(int drawableSize, int number) {
+    return (float) (0.8 - (getStringToDraw(number).length() * 0.1)) * drawableSize;
   }
 
-  @Override
-  protected void paintComponent(Graphics graphics) {
-    super.paintComponent(graphics);
-    board.draw(graphics, this.getSize());
-
-    if (!board.hasMoreMove()) {
-      graphics.drawImage(EndImage.getLostImage(this.board.getBoardDimension()), 0, 0, null);
-    }
-
-    if (board.hasReachedTarget()) {
-      graphics.drawImage(EndImage.getWonImage(this.board.getBoardDimension()), 0, 0, null);
-    }
-  }
-
-  public void setDrawingStrategy(TileDrawingStrategy drawingStrategy) {
-    this.drawingStrategy = drawingStrategy;
-    board.setDrawingStrategy(drawingStrategy);
+  public String getStringToDraw(int number) {
+    return Integer.toString(number);
   }
 }
