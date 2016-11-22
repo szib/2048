@@ -48,10 +48,14 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.BorderUIResource.TitledBorderUIResource;
 
 import com.szib.twozerofoureight.Board;
 import com.szib.twozerofoureight.Direction;
 import com.szib.twozerofoureight.HighScore;
+import com.szib.twozerofoureight.tile.ArabicNumbersStrategy;
+import com.szib.twozerofoureight.tile.RomanNumbersStrategy;
+import com.szib.twozerofoureight.tile.TileDrawingStrategy;
 
 public class GUI extends JFrame {
 
@@ -83,9 +87,25 @@ public class GUI extends JFrame {
     }
   }
 
+  private final class ActionSetArabicNumbers implements ActionListener {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+      setDrawingStrategy(new ArabicNumbersStrategy());
+    }
+  }
+
+  private final class ActionSetRomanNumbers implements ActionListener {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+      setDrawingStrategy(new RomanNumbersStrategy());
+    }
+  }
+
   private static final long serialVersionUID = 7923504931787121247L;
 
   private Board board;
+
+  private TileDrawingStrategy drawingStrategy;
 
   private final BoardPanel boardPanel;
 
@@ -174,6 +194,22 @@ public class GUI extends JFrame {
     boardSizeGroup.add(rdbtnmntmSize4);
     boardSizeGroup.add(rdbtnmntmSize5);
 
+    JMenu mnTileStyle = new JMenu("Tile style");
+    mnSettings.add(mnTileStyle);
+
+    JRadioButtonMenuItem rdbtnmntmRomanNumbers = new JRadioButtonMenuItem("Roman numbers");
+    rdbtnmntmRomanNumbers.addActionListener(new ActionSetRomanNumbers());
+    mnTileStyle.add(rdbtnmntmRomanNumbers);
+
+    JRadioButtonMenuItem rdbtnmntmArabicNumbers = new JRadioButtonMenuItem("Arabic numbers");
+    rdbtnmntmArabicNumbers.addActionListener(new ActionSetArabicNumbers());
+    rdbtnmntmArabicNumbers.setSelected(true);
+    mnTileStyle.add(rdbtnmntmArabicNumbers);
+
+    ButtonGroup tileStyleGroup = new ButtonGroup();
+    tileStyleGroup.add(rdbtnmntmArabicNumbers);
+    tileStyleGroup.add(rdbtnmntmRomanNumbers);
+
     JMenu mnHelp = new JMenu("Help");
     menuBar.add(mnHelp);
 
@@ -185,7 +221,7 @@ public class GUI extends JFrame {
     contentPane.setLayout(new BorderLayout(20, 0));
     setContentPane(contentPane);
 
-    boardPanel = new BoardPanel(board);
+    boardPanel = new BoardPanel(board, drawingStrategy);
     boardPanel.setPreferredSize(new Dimension(510, 510));
     boardPanel.setBackground(Color.BLACK);
     contentPane.add(boardPanel, BorderLayout.CENTER);
@@ -281,5 +317,10 @@ public class GUI extends JFrame {
 
   public int getHighScore() {
     return highScore;
+  }
+
+  public void setDrawingStrategy(TileDrawingStrategy drawingStrategy) {
+    this.drawingStrategy = drawingStrategy;
+    boardPanel.setDrawingStrategy(drawingStrategy);
   }
 }

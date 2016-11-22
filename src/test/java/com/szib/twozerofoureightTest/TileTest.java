@@ -32,8 +32,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.szib.twozerofoureight.Coords;
+import com.szib.twozerofoureight.tile.ArabicNumbersStrategy;
 import com.szib.twozerofoureight.tile.ITile;
-import com.szib.twozerofoureight.tile.StandardTile;
+import com.szib.twozerofoureight.tile.Tile;
 
 public class TileTest {
 
@@ -42,8 +43,8 @@ public class TileTest {
 
   @Before
   public void setUp() {
-    t1 = new StandardTile(new Coords(1, 1));
-    t2 = new StandardTile(new Coords(1, 2));
+    t1 = new Tile(new Coords(1, 1), new ArabicNumbersStrategy());
+    t2 = new Tile(new Coords(1, 2), new ArabicNumbersStrategy());
   }
 
   @After

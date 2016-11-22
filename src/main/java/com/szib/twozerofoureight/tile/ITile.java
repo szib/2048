@@ -65,4 +65,6 @@ public interface ITile {
   Color getFontColor();
 
   Color getBackgroundColor();
+
+  public void setDrawingStrategy(TileDrawingStrategy drawingStrategy);
 }

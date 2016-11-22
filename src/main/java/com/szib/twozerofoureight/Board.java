@@ -38,9 +38,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.szib.twozerofoureight.tile.ArabicNumbersStrategy;
 import com.szib.twozerofoureight.tile.ITile;
-import com.szib.twozerofoureight.tile.RomanTile;
-import com.szib.twozerofoureight.tile.StandardTile;
+import com.szib.twozerofoureight.tile.Tile;
+import com.szib.twozerofoureight.tile.TileDrawingStrategy;
 
 public class Board {
 
@@ -54,17 +55,21 @@ public class Board {
   private int score;
   private int boardDimension;
 
+  private TileDrawingStrategy drawingStrategy;
+
   public Board() {
     this(2048, 4);
   }
 
   public Board(int target, int boardSize) {
+    this.drawingStrategy = new ArabicNumbersStrategy();
     resetBoard(target, boardSize);
   }
 
   private void addNewTile() {
     if (!isFull()) {
-      tiles.add(new RomanTile(emptyCoords.remove(rng.nextInt(emptyCoords.size()))));
+      tiles.add(
+          new Tile(emptyCoords.remove(rng.nextInt(emptyCoords.size())), this.drawingStrategy));
     }
   }
 
@@ -282,5 +287,10 @@ public class Board {
       sBuilder.append('\n');
     }
     return sBuilder.toString();
+  }
+
+  public void setDrawingStrategy(TileDrawingStrategy drawingStrategy) {
+    this.drawingStrategy = drawingStrategy;
+    tiles.stream().forEach((t) -> t.setDrawingStrategy(this.drawingStrategy));
   }
 }
