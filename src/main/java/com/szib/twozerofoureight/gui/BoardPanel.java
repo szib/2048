@@ -58,5 +58,6 @@ public class BoardPanel extends JPanel {
   public void setDrawingStrategy(TileDrawingStrategy drawingStrategy) {
     this.drawingStrategy = drawingStrategy;
     board.setDrawingStrategy(drawingStrategy);
+    this.paintComponent(this.getGraphics());
   }
 }
