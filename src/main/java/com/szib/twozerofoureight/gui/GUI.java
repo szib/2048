@@ -48,14 +48,12 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.border.EmptyBorder;
-import javax.swing.plaf.BorderUIResource.TitledBorderUIResource;
 
 import com.szib.twozerofoureight.Board;
 import com.szib.twozerofoureight.Direction;
 import com.szib.twozerofoureight.HighScore;
 import com.szib.twozerofoureight.tile.ArabicNumbersStrategy;
 import com.szib.twozerofoureight.tile.RomanNumbersStrategy;
-import com.szib.twozerofoureight.tile.TileDrawingStrategy;
 
 public class GUI extends JFrame {
 
@@ -90,22 +88,22 @@ public class GUI extends JFrame {
   private final class ActionSetArabicNumbers implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
-      setDrawingStrategy(new ArabicNumbersStrategy());
+      board.setDrawingStrategy(new ArabicNumbersStrategy());
+      boardPanel.repaint();
     }
   }
 
   private final class ActionSetRomanNumbers implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
-      setDrawingStrategy(new RomanNumbersStrategy());
+      board.setDrawingStrategy(new RomanNumbersStrategy());
+      boardPanel.repaint();
     }
   }
 
   private static final long serialVersionUID = 7923504931787121247L;
 
   private Board board;
-
-  private TileDrawingStrategy drawingStrategy;
 
   private final BoardPanel boardPanel;
 
@@ -221,7 +219,7 @@ public class GUI extends JFrame {
     contentPane.setLayout(new BorderLayout(20, 0));
     setContentPane(contentPane);
 
-    boardPanel = new BoardPanel(board, drawingStrategy);
+    boardPanel = new BoardPanel(board);
     boardPanel.setPreferredSize(new Dimension(510, 510));
     boardPanel.setBackground(Color.BLACK);
     contentPane.add(boardPanel, BorderLayout.CENTER);
@@ -306,7 +304,6 @@ public class GUI extends JFrame {
     this.boardSize = boardSize;
   }
 
-  /** */
   private void resetGame() {
     setRunning(false);
     board.resetBoard(targetNumber, boardSize);
@@ -317,10 +314,5 @@ public class GUI extends JFrame {
 
   public int getHighScore() {
     return highScore;
-  }
-
-  public void setDrawingStrategy(TileDrawingStrategy drawingStrategy) {
-    this.drawingStrategy = drawingStrategy;
-    boardPanel.setDrawingStrategy(drawingStrategy);
   }
 }

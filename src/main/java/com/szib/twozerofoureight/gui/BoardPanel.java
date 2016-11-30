@@ -28,17 +28,14 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 import com.szib.twozerofoureight.Board;
-import com.szib.twozerofoureight.tile.TileDrawingStrategy;
 
 public class BoardPanel extends JPanel {
 
   private static final long serialVersionUID = -6115698763263796312L;
   private Board board;
-  private TileDrawingStrategy drawingStrategy;
 
-  public BoardPanel(Board board, TileDrawingStrategy drawingStrategy) {
+  public BoardPanel(Board board) {
     this.board = board;
-    this.drawingStrategy = drawingStrategy;
   }
 
   @Override
@@ -53,11 +50,5 @@ public class BoardPanel extends JPanel {
     if (board.hasReachedTarget()) {
       graphics.drawImage(EndImage.getWonImage(this.board.getBoardDimension()), 0, 0, null);
     }
-  }
-
-  public void setDrawingStrategy(TileDrawingStrategy drawingStrategy) {
-    this.drawingStrategy = drawingStrategy;
-    board.setDrawingStrategy(drawingStrategy);
-    this.paintComponent(this.getGraphics());
   }
 }
