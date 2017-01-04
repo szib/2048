@@ -50,6 +50,15 @@ dependencies {
     
 }
 
+jar {
+  manifest {
+    attributes(
+      'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
+      'Main-Class': 'com.szib.twozerofoureight.gui.GUI'
+    )
+  }
+}
+
 spotless {
 	java {
 		googleJavaFormat()
